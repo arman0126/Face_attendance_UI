@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Attendance – Camera</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #3f5485;
+            color: #e5e7eb;
+        }
+        .card {
+            background-color: #242c53;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.6);
+        }
+        img {
+            border-radius: 12px;
+            border: 3px solid #22c55e;
+        }
+        .btn {
+            border-radius: 10px;
+        }
+        .status-box span {
+            font-weight: bold;
+            color: #22c55e;
+        }
+        h5,p{
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-4">
+
+    <h2 class="text-center mb-4">🎥 Smart Attendance Camera</h2>
+
+    <div class="row g-4">
+
+        <!-- LEFT SIDE -->
+        <div class="col-md-4">
+
+            <!-- ADD USER -->
+            <div class="card p-3 mb-4">
+                <h5>Add New User</h5>
+                <form action="/add_user_web" method="post">
+                    <input type="text" name="username"
+                           class="form-control mb-2"
+                           placeholder="Enter user name" required>
+                    <button class="btn btn-primary w-100">
+                        Capture Face
+                    </button>
+                </form>
+            </div>
+
+            <!-- ATTENDANCE CONTROL -->
+            <div class="card p-3 mb-4">
+                <h5>Attendance Control</h5>
+                <a href="/start_attendance_btn" class="btn btn-success w-100 mb-2">
+                    ▶ Start Attendance
+                </a>
+                <a href="/stop_attendance_btn" class="btn btn-danger w-100">
+                    ⏹ Stop Attendance
+                </a>
+            </div>
+
+            <!-- STATUS -->
+            <div class="card p-3 status-box">
+                <h5>Status</h5>
+                <p>Attendance: <span id="attendance">OFF</span></p>
+                <p>Last Detected: <span id="last">None</span></p>
+                <p>Present Count: <span id="count">0</span></p>
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE CAMERA -->
+        <div class="col-md-8 text-center">
+            <div class="card p-3">
+                <img src="{{ url_for('video_feed') }}" class="img-fluid">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- LIVE STATUS SCRIPT -->
+<script>
+    setInterval(() => {
+        fetch("/status")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("attendance").innerText =
+                    data.attendance ? "ON" : "OFF";
+                document.getElementById("last").innerText =
+                    data.last_detected;
+                document.getElementById("count").innerText =
+                    data.present;
+            });
+    }, 1000);
+</script>
+
+</body>
+</html>

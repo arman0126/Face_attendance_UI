@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            position: fixed;
+            background: #343a40;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: white;
+            padding: 15px;
+            display: block;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background: #495057;
+        }
+        .content {
+            margin-left: 230px;
+            padding: 30px;
+        }
+        .card {
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h4 class="text-center text-white">Attendance</h4>
+    <hr class="text-white">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/users">Users</a>
+    <a href="/attendance_page">Attendance</a>
+    <a href="/camera">Camera</a>
+    <a href="/logout">Logout</a>
+</div>
+
+<!-- Content -->
+<div class="content">
+    <h2>Dashboard</h2>
+    <p>Welcome Admin 👋</p>
+
+    <div class="row mt-4">
+
+        <div class="col-md-4">
+            <div class="card shadow p-4 text-center">
+                <h5>Add User</h5>
+                <a href="/add_user">
+                    <button class="btn btn-primary mt-3 w-100">Capture Face</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow p-4 text-center">
+                <h5>Train Model</h5>
+                <a href="/train">
+                    <button class="btn btn-success mt-3 w-100">Train</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow p-4 text-center">
+                <h5>Start Attendance</h5>
+                <a href="/start_attendance">
+                    <button class="btn btn-danger mt-3 w-100">Start Camera</button>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
