@@ -1,12 +1,18 @@
 import cv2
 import pandas as pd
 from datetime import datetime
+import os
+
+# Load users properly (force int)
+users = pd.read_csv("users.csv")
+users["ID"] = users["ID"].astype(int)
+user_dict = dict(zip(users.ID, users.Name))
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
-recognizer.read('trainer.yml')
+recognizer.read("trainer.yml")
 
 faceCascade = cv2.CascadeClassifier(
-    cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
 )
 
 cam = cv2.VideoCapture(0)
@@ -20,10 +26,13 @@ while True:
     for (x,y,w,h) in faces:
         id, confidence = recognizer.predict(gray[y:y+h, x:x+w])
 
-        if confidence < 60:
-            name = f"User_{id}"
-            if name not in attendance:
-                attendance[name] = datetime.now().strftime("%H:%M:%S")
+        if confidence < 55 and id in user_dict:
+            name = user_dict[id]
+            date = datetime.now().strftime("%Y-%m-%d")
+            time = datetime.now().strftime("%H:%M:%S")
+
+            attendance[(id, date)] = [id, name, date, time]
+
             cv2.putText(img, name, (x,y-10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,0), 2)
         else:
@@ -39,6 +48,8 @@ while True:
 cam.release()
 cv2.destroyAllWindows()
 
-df = pd.DataFrame(attendance.items(), columns=['Name','Time'])
-df.to_csv('attendance.csv', index=False)
+df = pd.DataFrame(attendance.values(),
+                  columns=["ID","Name","Date","Time"])
 
+df.to_csv("attendance.csv", index=False)
+print("✅ Attendance Saved Correctly")
